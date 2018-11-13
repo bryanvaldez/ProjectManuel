@@ -6,6 +6,7 @@ include_once "libs/captcha/securimage.php";
 if ( ! session_id() ) @ session_start();
 
 $url = $_SERVER[ 'REQUEST_URI' ];
+
 $arrayParam = array ();
 $indexParam = strpos ( $url, "?" );
 
@@ -58,9 +59,17 @@ $action = strtolower ( $actionCut[ 0 ] ) . 'Action';
 
 $requireFile = "$module/" . str_replace ( ' ', '', ucwords ( str_replace ( '-', ' ', $controller ) ) ) . "Controller.php";
 
-
 require "$requireFile"; 
 $className = ucwords ( $module ) . '_' . str_replace ( ' ', '', ucwords ( str_replace ( '-', ' ', $controller ) ) ) . "Controller";
 
 $controller = new $className();
-call_user_func_array ( array ( $controller, $action ), $arrayParam );
+
+
+
+$requestBody = file_get_contents('php://input');
+if($requestBody != ''){
+    call_user_func ( array ( $controller, $action ), $requestBody); 
+}else{
+    call_user_func_array ( array ( $controller, $action ), $arrayParam );
+}
+

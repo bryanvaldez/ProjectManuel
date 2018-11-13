@@ -1,0 +1,109 @@
+    <div>            
+        <div style="padding: 30px 50px;" class="users-section" ng-cloak>
+                           
+
+
+
+            <div layout="row" layout-padding layout-wrap class="index-cont" ng-cloak >
+
+                <div ng-if="ctrl.modulo.id == 1" flex="100">
+                    <div style="padding: 30px 50px;" class="users-section" ng-cloak>
+
+
+                        <div class="section-head animated fadeIn" >
+                            <md-button href="${pageContext.request.contextPath}/main" class="md-icon-button btn-back" >
+                                <md-icon class="material-icons">arrow_back</md-icon>
+                            </md-button>
+                            <h5 class="title-section">{{ ctrl.modulo.nombre }} ([[ (users | filter:searchQuery).length ]])</h5>
+
+                            <div class="input-group" >
+                                <input maxlength="25" type="text" ng-model="query"  ng-enter="search()" placeholder="Busque por DNI, Nombre o Apellido..."  ><button ng-click="search()"><md-icon class="material-icons">search</md-icon></button>
+                            </div> 
+
+                            <md-button ng-click="add()" class="md-fab btn-new animated bounceInRight" >
+                                <md-icon class="material-icons">add</md-icon>
+                            </md-button>
+                        </div>                        
+                        <div class="line" style="margin-right:74px;"></div>
+                        <table class="table-default">
+                            <thead>
+                                <tr>
+                                    <th style="width: 3%;">N°</th>
+                                    <th style="width: 10%;" class="space">Detalle</th>
+                                    <th style="width: 15%;" class="space">Observacion</th> 
+                                    <th style="width: 20%;" class="space">Usuario Reg</th>                            
+                                    <th style="width: 17%;">Fecha Reg</th>                            
+                                    <th style="width: 15%;" class="space">Usuario Mod</th>
+                                    <th style="width: 5%;" class="space"></th>
+                                    <th style="width: 5%;" class="space"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div ng-show="showTable" >
+                            <div class="general_h">
+                                <table class="table-default">         
+                                    <tbody>
+                                        <tr ng-repeat="user in users| filter:searchQuery | orderBy:'-id'">
+                                            <td style="width: 3%;" class="rownum"><span ng-bind="$index + 1"></span></td>
+                                            <td style="width: 10%;" class="space"><span ng-bind="user.usuario | uppercase"></span></td>
+                                            <td style="width: 15%;" class="space"><span ng-bind="user.perfil.nombre | uppercase"></span></td>                        
+                                            <td style="width: 20%;" class="space"><span ng-bind="((user.apellidoPaterno ==null)?'':user.apellidoPaterno) + ' ' + ((user.apellidoMaterno==null)?'':user.apellidoMaterno) | uppercase"></span></td>                            
+                                            <td style="width: 17%;"><span ng-bind="user.nombre | uppercase"></span></td>                                
+                                            <td style="width: 15%;"><span ng-bind="user.fechaInicial == null ? 'INDEFINIDO' : (user.fechaInicial | date:'dd/MM/yyyy')+' - '+(user.fechaFinal | date:'dd/MM/yyyy')"></span></td>
+                                            <td style="width: 5%;" class="space action-col" style="width:20px;"><md-button ng-disabled="session == user.id" ng-click="edit(user.id)" class="md-icon-button" ><i class="fa fa-edit" style="font-size:17px;">[[]]</i></md-button></td>
+                                    <td style="width: 5%;" class="space action-col"><i ng-class="{positivo: user.estado == 0, negativo: user.estado == 2, pendiente: user.estado == 1}" class="fa fa-circle" style="font-size:18px;"></i></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="loading-message" ng-hide="(users | filter:searchQuery).length"><h3>No se encontraron datos.</h3></div>                             
+                            </div>                                 
+                        </div> 
+                        <div class="loading" ng-show="showLoading" layout="row" layout-sm="column" layout-align="center center">
+                            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                        </div>              
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <div ng-if="ctrl.modulo.id == null" flex-sm="100" flex-gt-sm="50" flex-gt-md="33" flex-gt-lg="25" ng-repeat="modulo in ctrl.modulos">                                     
+                    <div flex  md-colors="" class="block card-reporte" layout="column">                    
+                        <div flex layout="row">
+                            <div layout="row" flex="50">
+                                <md-icon  md-menu-align-target class="icon-top" style="margin: 0px;">
+                                    <i class="fa fa-bar-chart" style="font-size:23px;"></i>
+                                </md-icon>
+                            </div>
+                            <div layout="row" flex="50" ng-if="perfil==1">
+                                <md-icon  md-menu-align-target class="icon-top" style="cursor: pointer; margin-top: 0px; margin-right: 0px; padding-right: 1em;" ng-click="editReportes(reporte)">
+                                    <i class="fa fa-edit" style="font-size:23px;"></i>
+                                </md-icon>
+                                <md-icon  md-menu-align-target class="icon-top" style="cursor: pointer; margin-top: 0px; margin-right: 0px; padding-right: 1em;" ng-click="deleteReporte(reporte)">
+                                    <i class="fa fa-trash" style="font-size:23px;"></i>
+                                </md-icon>
+                            </div>                            
+                        </div>                        
+                        <div flex class="title" layout="row">
+                            <div flex="100">
+                                {{modulo.nombre}}
+                            </div>
+                        </div>
+                        <div flex layout-align="start center" layout="row" class="subtitle"> 
+                            {{modulo.descripcion}}                           
+                        </div>
+                        <div class="pleca" layout="row" layout-align="end center">
+                            <md-button  aria-label="generarReportes" ng-click="ctrl.link(modulo)">
+                                <i class="material-icons">reply</i>
+                            </md-button>                            
+                        </div>
+                    </div> 
+                </div>
+
+
+            </div>                             
+        </div> 
+    </div>  

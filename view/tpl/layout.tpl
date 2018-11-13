@@ -11,22 +11,34 @@
     <link rel="stylesheet" href="{{$_BASE_URL}}css/reset.css" type="text/css" media="screen"/>
     <link rel="stylesheet" href="{{$_BASE_URL}}css/lib/angular-material.min.css" type="text/css" media="screen"/>
     <link rel="stylesheet" href="{{$_BASE_URL}}css/lib/material-icon.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="{{$_BASE_URL}}css/style.css" type="text/css" media="screen"/>      
 </head>
 
 
-<body ng-controller="mainController as ctrl" ng-cloak>    
+<body ng-controller="indexController as ctrl" ng-init="ctrl.init();" ng-cloak>    
 
+    <div>
+      <md-content>
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2 flex md-truncate ng-bind="ctrl.user"></h2>
+            <md-button class="md-fab md-mini md-hue-3" aria-label="Favorite">
+                <i class="material-icons">exit_to_app</i>
+                <md-tooltip md-direction="bottom">Cerrar Sesión</md-tooltip>
+            </md-button>
+          </div>
+        </md-toolbar>
+      </md-content>
+    </div>
 
     <div layout="row" flex>
         <ui-view class="container containerMargen colorGreen" layout="column" flex ng-cloak>
-
         </ui-view>
     </div>
 
-
     <script type="text/javascript" charset="UTF-8" src="{{$_BASE_URL}}js/lib/angular.min.js" ></script>
+    <script type="text/javascript" charset="UTF-8" src="{{$_BASE_URL}}js/lib/angular-aria.min.js" ></script>        
     <script type="text/javascript" charset="UTF-8" src="{{$_BASE_URL}}js/lib/angular-ui-router.min.js" ></script>        
-    <script type="text/javascript" charset="UTF-8" src="{{$_BASE_URL}}js/lib/angular-aria.min.js" ></script>    
     <script type="text/javascript" charset="UTF-8" src="{{$_BASE_URL}}js/lib/angular-animate.min.js" ></script>    
     <script type="text/javascript" charset="UTF-8" src="{{$_BASE_URL}}js/lib/angular-material.min.js" ></script>    
     <script type="text/javascript" charset="UTF-8" src="{{$_BASE_URL}}js/lib/angular-messages.min.js" ></script> 
@@ -44,5 +56,7 @@
     <script type="text/javascript" charset="UTF-8" src="{{$_BASE_URL}}components/usuario/loginController.js"></script>
     <script type="text/javascript" charset="UTF-8" src="{{$_BASE_URL}}components/usuario/usuarioService.js"></script>
 
+    <!--Main-->
+    <script type="text/javascript" charset="UTF-8" src="{{$_BASE_URL}}components/main/main.js"></script>
   
 </body>

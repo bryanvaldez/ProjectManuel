@@ -1,1 +1,51 @@
-<h1>HOLAAAAAAAAAAAAAAAAAAAAA</h1>
+<!-- 
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+
+    Created on : 13/11/2018, 09:05:12 AM
+    Author     : Bryan Valdez <bvaldez at onpe.gob.pe>
+ -->
+
+<div layout="column" ng-cloak>
+    <div class="banner">
+        <div class=" animated fadeIn low">
+            <div class="title">
+                <span>SISTEMA</span>
+            </div>
+        </div>            
+    </div>
+    <div class="content">
+        <form name="form" ng-submit="ctrl.submit($event);" novalidate>
+            <div layout="row">
+                <div class="block1" layout="row" layout-align="center center" flex="100">
+                    <md-content>
+                        <md-input-container class="md-icon-float md-block">
+                            <label>Ingrese su Usuario</label>
+                            <md-icon  md-menu-align-target class="icon-top">
+                                <i style="color: #015780;" class="material-icons animated tada">&#xE853;</i>
+                            </md-icon>
+                            <input required class="inputhide" maxlength="8" type="text" is-number autocomplete="off" focus-me="focusUser" ng-model="ctrl.user" ng-change="ctrl.clean()" numbers-only>
+                        </md-input-container>   
+                        <md-input-container class="md-icon-float md-block">
+                            <label>Clave</label>
+                            <md-icon  md-menu-align-target class="icon-top">
+                                <i style="color: #015780;" class="material-icons animated tada">&#xE0DA;</i>
+                            </md-icon>
+                            <input required name="j_password" type="password" maxlength="8" ng-maxlength="8" autocomplete="false" ng-model="ctrl.password" ng-change="ctrl.clean()" solo-texto-numero-clave>                                
+                        </md-input-container>
+                        <p style="margin-bottom: 10px;color: red;">{{ctrl.message}}<p>
+                        <div class="block3" layout="row" layout-align="center center" flex="100">
+                            <md-button ng-if="form.$invalid" style="background-color: #015780;color: #fff;" ng-disabled="form.$invalid || vm.dataLoading" type="submit" ng-click="focusUsers()" class="md-raised button-login"  >
+                                INICIAR SESIÓN
+                            </md-button>
+                            <md-button ng-if="!form.$invalid" style="background-color: #12a537;color: #fff;" ng-disabled="form.$invalid || vm.dataLoading" type="submit" ng-click="focusUsers()" class="md-raised button-login"  >
+                                INICIAR SESIÓN
+                            </md-button>                        
+                        </div>
+                    </md-content>
+                </div>                                                                            
+            </div>                
+        </form>           
+    </div> 
+</div>        
