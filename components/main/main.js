@@ -186,7 +186,6 @@
             Service.getListData(self.modulo.id).then(
                 function (d) {
                     if(d.success){
-                        console.log(d.data);
                         setListData(d.data);
                     }
                 },

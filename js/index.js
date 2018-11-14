@@ -21,7 +21,6 @@ function indexController($scope, $localStorage, Constants, $rootScope) {
         init();
     });
 
-
     function logout() {
         $localStorage.$reset();
         location.href = Constants.SERVER;

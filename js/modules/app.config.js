@@ -42,7 +42,6 @@ angular.module('app').config(['$httpProvider', '$mdDateLocaleProvider',
 
         $rootScope.$watch(path, function (path, oldVal) {
             if (path === '/' && ($localStorage.usuario === undefined)) {
-                console.log("1");
                 $location.path('/login').replace();
             } else if (path === '/login' && $localStorage.usuario !== undefined) {
                 $location.path('/').replace();

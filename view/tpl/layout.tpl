@@ -4,7 +4,8 @@
 <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE7.js"></script>
 <![endif]-->    
 <head>
-    <title>Manuel</title>
+    <base href="/MANUEL/" />
+    <title>Sistema</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"  /> 
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
     <link rel="icon" type="image/png" href="{{$_BASE_URL}}favicon.ico" />

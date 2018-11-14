@@ -64,8 +64,6 @@ $className = ucwords ( $module ) . '_' . str_replace ( ' ', '', ucwords ( str_re
 
 $controller = new $className();
 
-
-
 $requestBody = file_get_contents('php://input');
 if($requestBody != ''){
     call_user_func ( array ( $controller, $action ), $requestBody); 

@@ -1,4 +1,4 @@
-angular.module('app').config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+angular.module('app').config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
 
 
@@ -16,5 +16,9 @@ angular.module('app').config(['$stateProvider', '$urlRouterProvider', function (
             controller: "loginController",
             controllerAs: "ctrl"
         });
+        $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: false
+        });        
 
     }]);
