@@ -15,6 +15,7 @@ function LoginController(Usuario, $location, $localStorage, $timeout, Constants,
     	$event.preventDefault();
         Usuario.login({user: self.user, password: self.password}).then(
             function (d) {
+                console.log(d);
                 if(d.success){
                     $localStorage.usuario = d.data.usuario;
                     $localStorage.nombres = d.data.nombres;

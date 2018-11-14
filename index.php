@@ -7,6 +7,10 @@ if ( ! session_id() ) @ session_start();
 
 $url = $_SERVER[ 'REQUEST_URI' ];
 
+if($url =='/MANUEL/login/' || $url =='/MANUEL/login'){
+    $url ='/MANUEL/';
+}
+
 $arrayParam = array ();
 $indexParam = strpos ( $url, "?" );
 
@@ -54,7 +58,6 @@ $module = strtolower ( $frontController[ 'module' ] );
 $controller = strtolower ( $frontController[ 'controller' ] );
 $actionCut = explode ( '?', $frontController[ 'action' ] );
 $action = strtolower ( $actionCut[ 0 ] ) . 'Action';
-
 
 
 $requireFile = "$module/" . str_replace ( ' ', '', ucwords ( str_replace ( '-', ' ', $controller ) ) ) . "Controller.php";

@@ -46,7 +46,6 @@ angular.module('app').config(['$httpProvider', '$mdDateLocaleProvider',
             } else if (path === '/login' && $localStorage.usuario !== undefined) {
                 $location.path('/').replace();
             } else if ($localStorage.usuario !== undefined) {
-
                 var exists = false;
                 if (path === '/preview') {
                     exists = true;
