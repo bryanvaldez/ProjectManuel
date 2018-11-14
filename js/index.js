@@ -2,23 +2,29 @@
 angular.module('app').controller('indexController', indexController);
 
 
-indexController.$inject = ['$scope', '$localStorage'];
-function indexController($scope, $localStorage) {
+indexController.$inject = ['$scope', '$localStorage', 'Constants', '$rootScope'];
+function indexController($scope, $localStorage, Constants, $rootScope) {
     var self = this;
     self.init = init;
+    self.logout = logout;    
 
 
     function init() {
-        self.user = $localStorage.user;
+        self.user = $localStorage.usuario;
+        self.nombres = $localStorage.nombres;
+        self.apPaterno = $localStorage.apPaterno;
         self.timestamp = new Date().getTime();
     }
+
+
+    $rootScope.$on('update', function(event, codes){
+        init();
+    });
+
+
     function logout() {
-        var user = null;
-        if ($localStorage.user !== undefined) {
-            user = $localStorage.user.nombreUsuario;
-        }
         $localStorage.$reset();
-        //location.href = CONTEXT + 'usuario/logout' + (user !== null ? '?username=' + user : '');
+        location.href = Constants.SERVER;
     }
 }
 

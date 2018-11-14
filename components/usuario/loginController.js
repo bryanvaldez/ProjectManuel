@@ -1,7 +1,7 @@
 angular.module('app').controller('loginController', LoginController);
 
-LoginController.$inject = ['Usuario', '$location', '$localStorage', '$timeout', 'Constants'];
-function LoginController(Usuario, $location, $localStorage, $timeout, Constants) {
+LoginController.$inject = ['Usuario', '$location', '$localStorage', '$timeout', 'Constants', '$rootScope'];
+function LoginController(Usuario, $location, $localStorage, $timeout, Constants, $rootScope) {
     var self = this;
 
     self.submit = submit;
@@ -16,11 +16,11 @@ function LoginController(Usuario, $location, $localStorage, $timeout, Constants)
         Usuario.login({user: self.user, password: self.password}).then(
             function (d) {
                 if(d.success){
-                    console.log(d.data);
                     $localStorage.usuario = d.data.usuario;
                     $localStorage.nombres = d.data.nombres;
                     $localStorage.apMaterno = d.data.apMaterno;
                     $localStorage.apPaterno = d.data.apPaterno;
+                    $rootScope.$emit('update', 1);                    
                     $location.path('/');
                     return true;
                 }else{

@@ -17,14 +17,14 @@
 
 <body ng-controller="indexController as ctrl" ng-init="ctrl.init();" ng-cloak>    
 
-    <div>
+    <div ng-hide="ctrl.nombres == null">
       <md-content>
         <md-toolbar>
           <div class="md-toolbar-tools">
-            <h2 flex md-truncate ng-bind="ctrl.user"></h2>
-            <md-button class="md-fab md-mini md-hue-3" aria-label="Favorite">
-                <i class="material-icons">exit_to_app</i>
-                <md-tooltip md-direction="bottom">Cerrar Sesión</md-tooltip>
+            <h2 flex md-truncate ng-bind="ctrl.nombres"></h2>
+            <md-button ng-click="ctrl.logout()" class="md-fab md-mini md-hue-3" aria-label="Favorite">
+                <i class="material-icons">exit_to_app</i> 
+                <md-tooltip md-direction="bottom">Cerrar Sesión</md-tooltip>  
             </md-button>
           </div>
         </md-toolbar>

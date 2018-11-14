@@ -1,26 +1,22 @@
     <div>            
-        <div style="padding: 30px 50px;" class="users-section" ng-cloak>
-                           
+        <div style="padding: 30px 50px;" class="users-section" ng-cloak>                           
+            <div layout="row" layout-padding layout-wrap class="index-cont" ng-cloak>
 
 
 
-            <div layout="row" layout-padding layout-wrap class="index-cont" ng-cloak >
-
-                <div ng-if="ctrl.modulo.id == 1" flex="100">
+                <div ng-show="ctrl.modulo.id == 1" flex="100">
                     <div style="padding: 30px 50px;" class="users-section" ng-cloak>
-
-
                         <div class="section-head animated fadeIn" >
-                            <md-button href="${pageContext.request.contextPath}/main" class="md-icon-button btn-back" >
+                            <md-button ng-click="ctrl.back()" class="md-icon-button btn-back" >
                                 <md-icon class="material-icons">arrow_back</md-icon>
                             </md-button>
-                            <h5 class="title-section">{{ ctrl.modulo.nombre }} ([[ (users | filter:searchQuery).length ]])</h5>
+                            <h5 class="title-section">{{ ctrl.modulo.nombre }} ( {{ (ctrl.incidentes | filter:searchQuery).length }} )</h5>
 
                             <div class="input-group" >
                                 <input maxlength="25" type="text" ng-model="query"  ng-enter="search()" placeholder="Busque por DNI, Nombre o Apellido..."  ><button ng-click="search()"><md-icon class="material-icons">search</md-icon></button>
                             </div> 
 
-                            <md-button ng-click="add()" class="md-fab btn-new animated bounceInRight" >
+                            <md-button ng-disabled="ctrl.bussy" ng-click="ctrl.add()" class="md-fab btn-new animated bounceInRight" >
                                 <md-icon class="material-icons">add</md-icon>
                             </md-button>
                         </div>                        
@@ -29,33 +25,50 @@
                             <thead>
                                 <tr>
                                     <th style="width: 3%;">N°</th>
-                                    <th style="width: 10%;" class="space">Detalle</th>
-                                    <th style="width: 15%;" class="space">Observacion</th> 
-                                    <th style="width: 20%;" class="space">Usuario Reg</th>                            
-                                    <th style="width: 17%;">Fecha Reg</th>                            
-                                    <th style="width: 15%;" class="space">Usuario Mod</th>
+                                    <th style="width: 35%;" class="space">Detalle</th>
+                                    <th style="width: 15%;" class="space">Estado</th> 
+                                    <th style="width: 25%;" class="space">Observacion</th>                            
                                     <th style="width: 5%;" class="space"></th>
                                     <th style="width: 5%;" class="space"></th>
                                 </tr>
                             </thead>
                         </table>
-                        <div ng-show="showTable" >
+                        <div>
                             <div class="general_h">
                                 <table class="table-default">         
                                     <tbody>
-                                        <tr ng-repeat="user in users| filter:searchQuery | orderBy:'-id'">
+                                        <tr ng-repeat="item in ctrl.incidentes | orderBy:'$index':true ">
                                             <td style="width: 3%;" class="rownum"><span ng-bind="$index + 1"></span></td>
-                                            <td style="width: 10%;" class="space"><span ng-bind="user.usuario | uppercase"></span></td>
-                                            <td style="width: 15%;" class="space"><span ng-bind="user.perfil.nombre | uppercase"></span></td>                        
-                                            <td style="width: 20%;" class="space"><span ng-bind="((user.apellidoPaterno ==null)?'':user.apellidoPaterno) + ' ' + ((user.apellidoMaterno==null)?'':user.apellidoMaterno) | uppercase"></span></td>                            
-                                            <td style="width: 17%;"><span ng-bind="user.nombre | uppercase"></span></td>                                
-                                            <td style="width: 15%;"><span ng-bind="user.fechaInicial == null ? 'INDEFINIDO' : (user.fechaInicial | date:'dd/MM/yyyy')+' - '+(user.fechaFinal | date:'dd/MM/yyyy')"></span></td>
-                                            <td style="width: 5%;" class="space action-col" style="width:20px;"><md-button ng-disabled="session == user.id" ng-click="edit(user.id)" class="md-icon-button" ><i class="fa fa-edit" style="font-size:17px;">[[]]</i></md-button></td>
-                                    <td style="width: 5%;" class="space action-col"><i ng-class="{positivo: user.estado == 0, negativo: user.estado == 2, pendiente: user.estado == 1}" class="fa fa-circle" style="font-size:18px;"></i></td>
+                                            <td style="width: 35%;" class="space">
+                                                <md-input-container md-no-float style="width: 100%">
+                                                    <input ng-disabled="item.edit == 0" name="monto" ng-model="item.detalle"  placeholder="Ingrese su información" autocomplete="off" required>                                                        
+                                                </md-input-container>                                             
+                                            </td>
+                                            <td style="width: 15%;" class="space">
+                                                <md-input-container md-no-float flex="100">
+                                                    <md-select ng-disabled="item.edit == 0" name="codAporte" ng-model="item.estado"  placeholder="codigo" required>
+                                                        <md-option ng-value="1">Activo</md-option>
+                                                        <md-option ng-value="0">Inactivo</md-option>
+                                                    </md-select>
+                                                </md-input-container> 
+                                            </td>                        
+                                            <td style="width: 25%;" class="space">
+                                                <md-input-container md-no-float style="text-align: justify;" flex="100">
+                                                    <textarea ng-disabled="item.edit == 0" name="dirProcedencia" ng-model="item.observacion" ng-trim="false" md-maxlength="i.estado === 1 && 500" maxlength="500" md-select-on-focus placeholder="Ingrese su información" autocomplete="off" required></textarea>                                              
+                                                </md-input-container>
+                                            </td> 
+                                            <td style="width: 5%;" class="space action-col" style="width:20px;">
+                                                <md-button ng-if="item.edit == 0" ng-click="ctrl.edit(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">edit</i></md-button>
+                                                <md-button ng-if="item.edit == 1" ng-click="ctrl.save(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">save</i></md-button>                                                      
+                                            </td>
+                                            <td style="width: 5%;" class="space action-col" style="width:20px;">
+                                                <md-button ng-if="item.edit == 0" ng-click="ctrl.remove(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">delete</i></md-button>
+                                                <md-button ng-if="item.edit == 1" ng-click="ctrl.close(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">close</i></md-button>                                                
+                                            </td>
                                     </tr>
                                     </tbody>
                                 </table>
-                                <div class="loading-message" ng-hide="(users | filter:searchQuery).length"><h3>No se encontraron datos.</h3></div>                             
+                                <div class="loading-message" ng-hide="(ctrl.incidentes | filter:searchQuery).length"><h3>No se encontraron datos.</h3></div>                             
                             </div>                                 
                         </div> 
                         <div class="loading" ng-show="showLoading" layout="row" layout-sm="column" layout-align="center center">
@@ -65,6 +78,236 @@
                 </div>
 
 
+
+                <div ng-show="ctrl.modulo.id == 2" flex="100">
+                    <div style="padding: 30px 50px;" class="users-section" ng-cloak>
+                        <div class="section-head animated fadeIn" >
+                            <md-button ng-click="ctrl.back()" class="md-icon-button btn-back" >
+                                <md-icon class="material-icons">arrow_back</md-icon>
+                            </md-button>
+                            <h5 class="title-section">{{ ctrl.modulo.nombre }} ( {{ (ctrl.productos | filter:searchQuery).length }} )</h5>
+
+                            <div class="input-group" >
+                                <input maxlength="25" type="text" ng-model="query"  ng-enter="search()" placeholder="Busque por DNI, Nombre o Apellido..."  ><button ng-click="search()"><md-icon class="material-icons">search</md-icon></button>
+                            </div> 
+
+                            <md-button ng-disabled="ctrl.bussy" ng-click="ctrl.add()" class="md-fab btn-new animated bounceInRight" >
+                                <md-icon class="material-icons">add</md-icon>
+                            </md-button>
+                        </div>                        
+                        <div class="line" style="margin-right:74px;"></div>
+                        <table class="table-default">
+                            <thead>
+                                <tr>
+                                    <th style="width: 3%;">N°</th>
+                                    <th style="width: 15%;" class="space">Nombre</th>
+                                    <th style="width: 15%;" class="space">Marca</th> 
+                                    <th style="width: 15%;" class="space">Modelo</th>  
+                                    <th style="width: 15%;" class="space">Serie</th>  
+                                    <th style="width: 15%;" class="space">Categoria</th>  
+                                    <th style="width: 5%;" class="space"></th>
+                                    <th style="width: 5%;" class="space"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div>
+                            <div class="general_h">
+                                <table class="table-default">         
+                                    <tbody>
+                                        <tr ng-repeat="item in ctrl.productos | orderBy:'$index':true ">
+                                            <td style="width: 3%;" class="rownum"><span ng-bind="$index + 1"></span></td>
+                                            <td style="width: 15%;" class="space">
+                                                <md-input-container md-no-float style="width: 100%">
+                                                    <input ng-disabled="item.edit == 0" name="monto" ng-model="item.nombre"  placeholder="Ingrese su información" autocomplete="off" required>                                                        
+                                                </md-input-container>                                             
+                                            </td>
+                                            <td style="width: 15%;" class="space">
+                                                <md-input-container md-no-float style="width: 100%">
+                                                    <input ng-disabled="item.edit == 0" name="monto" ng-model="item.marca"  placeholder="Ingrese su información" autocomplete="off" required>                                                        
+                                                </md-input-container>                                             
+                                            </td>
+                                            <td style="width: 15%;" class="space">
+                                                <md-input-container md-no-float style="width: 100%">
+                                                    <input ng-disabled="item.edit == 0" name="monto" ng-model="item.modelo"  placeholder="Ingrese su información" autocomplete="off" required>                                                        
+                                                </md-input-container>                                             
+                                            </td>
+                                            <td style="width: 15%;" class="space">
+                                                <md-input-container md-no-float style="width: 100%">
+                                                    <input ng-disabled="item.edit == 0" name="monto" ng-model="item.serie"  placeholder="Ingrese su información" autocomplete="off" required>                                                        
+                                                </md-input-container>                                             
+                                            </td>                                                                                                                                    
+                                            <td style="width: 15%;" class="space">
+                                                <md-input-container md-no-float flex="100">
+                                                    <md-select ng-disabled="item.edit == 0" name="codAporte" ng-model="item.idCategoria"  placeholder="codigo" required>
+                                                        <md-option ng-value="1">Activo</md-option>
+                                                        <md-option ng-value="0">Inactivo</md-option>
+                                                    </md-select>
+                                                </md-input-container> 
+                                            </td>                        
+                                            <td style="width: 5%;" class="space action-col" style="width:20px;">
+                                                <md-button ng-if="item.edit == 0" ng-click="ctrl.edit(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">edit</i></md-button>
+                                                <md-button ng-if="item.edit == 1" ng-click="ctrl.save(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">save</i></md-button>                                                      
+                                            </td>
+                                            <td style="width: 5%;" class="space action-col" style="width:20px;">
+                                                <md-button ng-if="item.edit == 0" ng-click="ctrl.remove(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">delete</i></md-button>
+                                                <md-button ng-if="item.edit == 1" ng-click="ctrl.close(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">close</i></md-button>                                                
+                                            </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="loading-message" ng-hide="(ctrl.incidentes | filter:searchQuery).length"><h3>No se encontraron datos.</h3></div>                             
+                            </div>                                 
+                        </div> 
+                        <div class="loading" ng-show="showLoading" layout="row" layout-sm="column" layout-align="center center">
+                            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                        </div>              
+                    </div>
+                </div>
+
+
+                <div ng-show="ctrl.modulo.id == 3" flex="100">
+                    <div style="padding: 30px 50px;" class="users-section" ng-cloak>
+                        <div class="section-head animated fadeIn" >
+                            <md-button ng-click="ctrl.back()" class="md-icon-button btn-back" >
+                                <md-icon class="material-icons">arrow_back</md-icon>
+                            </md-button>
+                            <h5 class="title-section">{{ ctrl.modulo.nombre }} ( {{ (ctrl.productos | filter:searchQuery).length }} )</h5>
+
+                            <div class="input-group" >
+                                <input maxlength="25" type="text" ng-model="query"  ng-enter="search()" placeholder="Busque por DNI, Nombre o Apellido..."  ><button ng-click="search()"><md-icon class="material-icons">search</md-icon></button>
+                            </div> 
+
+                            <md-button ng-disabled="ctrl.bussy" ng-click="ctrl.add()" class="md-fab btn-new animated bounceInRight" >
+                                <md-icon class="material-icons">add</md-icon>
+                            </md-button>
+                        </div>                        
+                        <div class="line" style="margin-right:74px;"></div>
+                        <table class="table-default">
+                            <thead>
+                                <tr>
+                                    <th style="width: 3%;">N°</th>
+                                    <th style="width: 15%;" class="space">Tipo documento</th>
+                                    <th style="width: 15%;" class="space">Documento</th> 
+                                    <th style="width: 15%;" class="space">Apellido Paterno</th>  
+                                    <th style="width: 15%;" class="space">Apellido Materno</th>  
+                                    <th style="width: 15%;" class="space">Nombres</th>  
+                                    <th style="width: 5%;" class="space"></th>
+                                    <th style="width: 5%;" class="space"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div>
+                            <div class="general_h">
+                                <table class="table-default">         
+                                    <tbody>
+                                        <tr ng-repeat="item in ctrl.clientes | orderBy:'$index':true ">
+                                            <td style="width: 3%;" class="rownum"><span ng-bind="$index + 1"></span></td>
+                                            <td style="width: 15%;" class="space">
+                                                <md-input-container md-no-float flex="100">
+                                                    <md-select ng-disabled="item.edit == 0" name="codAporte" ng-model="item.tipoDocumento"  placeholder="codigo" required>
+                                                        <md-option ng-value="1">Activo</md-option>
+                                                        <md-option ng-value="0">Inactivo</md-option>
+                                                    </md-select>
+                                                </md-input-container>                                            
+                                            </td>
+                                            <td style="width: 15%;" class="space">
+                                                <md-input-container md-no-float style="width: 100%">
+                                                    <input ng-disabled="item.edit == 0" name="monto" ng-model="item.documento"  placeholder="Ingrese su información" autocomplete="off" required>                                                        
+                                                </md-input-container>                                             
+                                            </td>
+                                            <td style="width: 15%;" class="space">
+                                                <md-input-container md-no-float style="width: 100%">
+                                                    <input ng-disabled="item.edit == 0" name="monto" ng-model="item.apPaterno"  placeholder="Ingrese su información" autocomplete="off" required>                                                        
+                                                </md-input-container>                                             
+                                            </td>
+                                            <td style="width: 15%;" class="space">
+                                                <md-input-container md-no-float style="width: 100%">
+                                                    <input ng-disabled="item.edit == 0" name="monto" ng-model="item.apMaterno"  placeholder="Ingrese su información" autocomplete="off" required>                                                        
+                                                </md-input-container>                                             
+                                            </td>                                                                                                                                    
+                                            <td style="width: 15%;" class="space">
+                                                <md-input-container md-no-float style="width: 100%">
+                                                    <input ng-disabled="item.edit == 0" name="monto" ng-model="item.nombre"  placeholder="Ingrese su información" autocomplete="off" required>                                                        
+                                                </md-input-container> 
+                                            </td>                        
+                                            <td style="width: 5%;" class="space action-col" style="width:20px;">
+                                                <md-button ng-if="item.edit == 0" ng-click="ctrl.edit(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">edit</i></md-button>
+                                                <md-button ng-if="item.edit == 1" ng-click="ctrl.save(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">save</i></md-button>                                                      
+                                            </td>
+                                            <td style="width: 5%;" class="space action-col" style="width:20px;">
+                                                <md-button ng-if="item.edit == 0" ng-click="ctrl.remove(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">delete</i></md-button>
+                                                <md-button ng-if="item.edit == 1" ng-click="ctrl.close(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">close</i></md-button>                                                
+                                            </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="loading-message" ng-hide="(ctrl.incidentes | filter:searchQuery).length"><h3>No se encontraron datos.</h3></div>                             
+                            </div>                                 
+                        </div> 
+                        <div class="loading" ng-show="showLoading" layout="row" layout-sm="column" layout-align="center center">
+                            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                        </div>              
+                    </div>
+                </div>
+
+
+                <div ng-show="ctrl.modulo.id == 4" flex="100">
+                    <div style="padding: 30px 50px;" class="users-section" ng-cloak>
+                        <div class="section-head animated fadeIn" >
+                            <md-button ng-click="ctrl.back()" class="md-icon-button btn-back" >
+                                <md-icon class="material-icons">arrow_back</md-icon>
+                            </md-button>
+                            <h5 class="title-section">{{ ctrl.modulo.nombre }} ( {{ (ctrl.productos | filter:searchQuery).length }} )</h5>
+
+                            <div class="input-group" >
+                                <input maxlength="25" type="text" ng-model="query"  ng-enter="search()" placeholder="Busque por DNI, Nombre o Apellido..."  ><button ng-click="search()"><md-icon class="material-icons">search</md-icon></button>
+                            </div> 
+
+                            <md-button ng-disabled="ctrl.bussy" ng-click="ctrl.add()" class="md-fab btn-new animated bounceInRight" >
+                                <md-icon class="material-icons">add</md-icon>
+                            </md-button>
+                        </div>                        
+                        <div class="line" style="margin-right:74px;"></div>
+                        <table class="table-default">
+                            <thead>
+                                <tr>
+                                    <th style="width: 3%;">N°</th>
+                                    <th style="width: 15%;" class="space">Nombre Categoria</th>  
+                                    <th style="width: 5%;" class="space"></th>
+                                    <th style="width: 5%;" class="space"></th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div>
+                            <div class="general_h">
+                                <table class="table-default">         
+                                    <tbody>
+                                        <tr ng-repeat="item in ctrl.categorias | orderBy:'$index':true ">
+                                            <td style="width: 3%;" class="rownum"><span ng-bind="$index + 1"></span></td>
+                                            <td style="width: 15%;" class="space">
+                                                <md-input-container md-no-float style="width: 100%">
+                                                    <input ng-disabled="item.edit == 0" name="monto" ng-model="item.nombre"  placeholder="Ingrese su información" autocomplete="off" required>                                                        
+                                                </md-input-container>                                             
+                                            </td>                  
+                                            <td style="width: 5%;" class="space action-col" style="width:20px;">
+                                                <md-button ng-if="item.edit == 0" ng-click="ctrl.edit(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">edit</i></md-button>
+                                                <md-button ng-if="item.edit == 1" ng-click="ctrl.save(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">save</i></md-button>                                                      
+                                            </td>
+                                            <td style="width: 5%;" class="space action-col" style="width:20px;">
+                                                <md-button ng-if="item.edit == 0" ng-click="ctrl.remove(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">delete</i></md-button>
+                                                <md-button ng-if="item.edit == 1" ng-click="ctrl.close(item)" class="md-icon-button" ><i class="material-icons" style="font-size:17px;">close</i></md-button>                                                
+                                            </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="loading-message" ng-hide="(ctrl.incidentes | filter:searchQuery).length"><h3>No se encontraron datos.</h3></div>                             
+                            </div>                                 
+                        </div> 
+                        <div class="loading" ng-show="showLoading" layout="row" layout-sm="column" layout-align="center center">
+                            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                        </div>              
+                    </div>
+                </div>
 
 
 
@@ -102,8 +345,6 @@
                         </div>
                     </div> 
                 </div>
-
-
             </div>                             
         </div> 
     </div>  
