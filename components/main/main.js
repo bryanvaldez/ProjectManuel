@@ -91,7 +91,7 @@
             Service.removeData({type: self.modulo.id, data: i}).then(
                 function (d) {
                     if(d.success){
-                        close(i);
+                        getListData();
                     }else{
                         console.log("no se pudo eliminar");
                     }
